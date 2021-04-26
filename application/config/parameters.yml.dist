@@ -1,0 +1,5 @@
+parameters:
+
+  microservice.first_http.config_url:      'http://http-microservice-nginx:81/get_configuration'
+  microservice.second_rest_api.config_url: 'http://localhost:82'
+  microservice.third_grpc.config_url:      'http://localhost:83'

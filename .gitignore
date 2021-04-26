@@ -1,0 +1,6 @@
+/.idea/
+/databases/shop_api/*
+!/databases/shop_api/.gitkeep
+/environment/logs/*
+!/environment/logs/.gitkeep
+docker-compose.yml
