@@ -1,0 +1,6 @@
+parameters:
+  app.microservice.grpc.config.uuid: '00000000-0000-0000-0000-000000000002'
+  app.microservice.grpc.config.fields:
+    field1: 'field1_string'
+    field2: true
+    field3: 123

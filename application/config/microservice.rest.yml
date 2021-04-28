@@ -1,0 +1,9 @@
+parameters:
+  app.microservice.rest.config.uuid: '00000000-0000-0000-0000-000000000001'
+  app.microservice.rest.config.fields:
+    field1: 'field1_string'
+    field2: true
+    field3:
+      - 'string1'
+      - 'string2'
+      - 'string3'

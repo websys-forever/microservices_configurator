@@ -1,7 +1,9 @@
 parameters:
 
 imports:
-    - { resource: parameters.yml }
+    - { resource: microservice.rest.yml }
+    - { resource: microservice.grpc.yml }
+    - { resource: microservice.http.yml }
 
 services:
     # default configuration for services in *this* file
@@ -28,28 +30,43 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Service\Microservice\Configuration\HttpConfigurationAdapter:
-
-    Symfony\Component\HttpClient\HttpClient:
-
-    microservice.first_http.config_adapter:
-        class: App\Service\Microservice\Configuration\HttpConfigurationAdapter
+    microservice.first_rest.config:
+        class: App\Service\ConfigProvider\Microservices\RestApiMicroservice\Config
         arguments:
-            - '@Symfony\Contracts\HttpClient\HttpClientInterface'
-            - '%microservice.first_http.config_url%'
+            - '%app.microservice.rest.config.uuid%'
+            - '%app.microservice.rest.config.fields%'
 
-    App\Service\Microservice\Configuration\RestApiConfigurationAdapter:
-    microservice.second_rest_api.config_adapter:
-        class: App\Service\Microservice\Configuration\RestApiConfigurationAdapter
-
-    App\Service\Microservice\Configuration\GRPCConfigurationAdapter:
-    microservice.third_grpc.config_adapter:
-        class: App\Service\Microservice\Configuration\GRPCConfigurationAdapter
-
-    App\Service\Microservice\Configuration\Configurator:
+    microservice.first_rest.config_adapter:
+        class: App\Service\ConfigProvider\RestApiConfigProvider
         arguments:
-            $microservicesConfigAdapters:
-                - '@microservice.first_http.config_adapter'
-                - '@microservice.second_rest_api.config_adapter'
-                - '@microservice.third_grpc.config_adapter'
+            - '@microservice.first_rest.config'
+
+    microservice.second_grpc.config:
+        class: App\Service\ConfigProvider\Microservices\GrpcMicroservice\Config
+        arguments:
+            - '%app.microservice.grpc.config.uuid%'
+            - '%app.microservice.grpc.config.fields%'
+
+    microservice.second_grpc.config_adapter:
+        class: App\Service\ConfigProvider\GrpcConfigProvider
+        arguments:
+            - '@microservice.second_grpc.config'
+
+    microservice.third_http.config:
+        class: App\Service\ConfigProvider\Microservices\HttpMicroservice\Config
+        arguments:
+            - '%app.microservice.http.config.uuid%'
+            - '%app.microservice.http.config.fields%'
+
+    microservice.third_http.config_adapter:
+        class: App\Service\ConfigProvider\HttpConfigProvider
+        arguments:
+            - '@microservice.third_http.config'
+
+    App\Service\ConfigProvider\ConfigManager:
+        arguments:
+            $configProviders:
+                - '@microservice.first_rest.config_adapter'
+                - '@microservice.second_grpc.config_adapter'
+                - '@microservice.third_http.config_adapter'
 

@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Service\Microservice\Configuration\ConfiguratorInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use App\Service\ConfigProvider\ConfigManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MicroservicesConfiguratorController
+class MicroservicesConfiguratorController extends AbstractController
 {
     /**
-     * @Route("/configs")
+     * @Route("/configs", methods={"GET"})
      */
-    public function listConfigurations(ConfiguratorInterface $configurator)
+    public function listConfigurations(ConfigManager $configManager)
     {
-        $configurations = $configurator->getConfigurations();
+        $configs = $configManager->getAllConfigs();
 
-        return new JsonResponse($configurations);
+        return $this->render('', $configs);
     }
 }
