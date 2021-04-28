@@ -30,6 +30,6 @@ class MicroservicesConfiguratorController extends AbstractController
         $configs = $this->configurator->getAllConfigs();
         $forms = $this->formConstructor->createForms($configs);
 
-        return $this->render('', ['forms' => $forms]);
+        return $this->render('config/index.html.twig', ['forms' => $forms]);
     }
 }

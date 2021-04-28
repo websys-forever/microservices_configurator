@@ -55,5 +55,3 @@ services:
                 - '@microservice.grpc.config_provider'
                 - '@microservice.http.config_provider'
 
-    #Symfony\Component\Form\FormBuilderInterface:
-
