@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\ConfigProvider;
 
-class ConfigManager
+class Configurator
 {
     private array $configProviders;
 
@@ -16,7 +16,7 @@ class ConfigManager
     public function getAllConfigs(): array
     {
         $configs = [];
-echo '<pre>'; print_r($this->configProviders);
+
         /** @var ConfigProviderInterface $provider */
         foreach ($this->configProviders as $provider) {
             $configs[] = $provider->getConfigs();
@@ -27,7 +27,7 @@ echo '<pre>'; print_r($this->configProviders);
 
     public function update($serviceName, array $configs): bool
     {
-        return true;
+        return true; // TODO реализовать
     }
 
 

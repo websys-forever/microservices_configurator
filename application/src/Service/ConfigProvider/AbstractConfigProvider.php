@@ -4,29 +4,48 @@ declare(strict_types=1);
 
 namespace App\Service\ConfigProvider;
 
-use App\Service\ConfigProvider\Microservices\MicroserviceConfigInterface;
+use App\DTO\Config\ConfigChoice;
+use App\DTO\Config\ConfigCollectionDto;
+use App\DTO\Config\ConfigInteger;
+use App\DTO\Config\ConfigInterface;
+use App\DTO\Config\ConfigText;
 
 abstract class AbstractConfigProvider implements ConfigProviderInterface
 {
-    private MicroserviceConfigInterface $microserviceConfig;
+    private string $microserviceUuid;
+    private array  $configs;
 
-    public function __construct(MicroserviceConfigInterface $microserviceConfig)
+    public function __construct(string $microserviceUuid, array $configs)
     {
-        $this->microserviceConfig = $microserviceConfig;
+        $this->microserviceUuid = $microserviceUuid;
+        $this->configs = $configs;
     }
 
     public function getName(): string
     {
-        return (string) key($this->microserviceConfig->getConfig());
+        return $this->microserviceUuid;
     }
 
-    public function getConfigs(): array
+    public function getConfigs(): ConfigCollectionDto
     {
-        return $this->microserviceConfig->getConfig();
+        $configCollection = [];
+
+        /** @var ConfigInterface $config */
+        foreach ($this->configs as $name => $config) {
+            if (is_int($config)) {
+                $configCollection[] = new ConfigInteger($name, $config);
+            } elseif (is_array($config)) {
+                $configCollection[] = new ConfigChoice($name, $config);
+            } else {
+                $configCollection[] = new ConfigText($name, $config);
+            }
+        }
+
+        return new ConfigCollectionDto($this->microserviceUuid, $configCollection);
     }
 
     public function saveConfigs(array $configs): bool
     {
-        return true;
+        return true; // TODO реализовать
     }
 }

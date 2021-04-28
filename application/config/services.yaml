@@ -30,43 +30,30 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    microservice.first_rest.config:
-        class: App\Service\ConfigProvider\Microservices\RestApiMicroservice\Config
+    microservice.rest.config_provider:
+        class: App\Service\ConfigProvider\RestApiConfigProvider
         arguments:
             - '%app.microservice.rest.config.uuid%'
             - '%app.microservice.rest.config.fields%'
 
-    microservice.first_rest.config_adapter:
-        class: App\Service\ConfigProvider\RestApiConfigProvider
-        arguments:
-            - '@microservice.first_rest.config'
-
-    microservice.second_grpc.config:
-        class: App\Service\ConfigProvider\Microservices\GrpcMicroservice\Config
+    microservice.grpc.config_provider:
+        class: App\Service\ConfigProvider\GrpcConfigProvider
         arguments:
             - '%app.microservice.grpc.config.uuid%'
             - '%app.microservice.grpc.config.fields%'
 
-    microservice.second_grpc.config_adapter:
-        class: App\Service\ConfigProvider\GrpcConfigProvider
-        arguments:
-            - '@microservice.second_grpc.config'
-
-    microservice.third_http.config:
-        class: App\Service\ConfigProvider\Microservices\HttpMicroservice\Config
+    microservice.http.config_provider:
+        class: App\Service\ConfigProvider\HttpConfigProvider
         arguments:
             - '%app.microservice.http.config.uuid%'
             - '%app.microservice.http.config.fields%'
 
-    microservice.third_http.config_adapter:
-        class: App\Service\ConfigProvider\HttpConfigProvider
-        arguments:
-            - '@microservice.third_http.config'
-
-    App\Service\ConfigProvider\ConfigManager:
+    App\Service\ConfigProvider\Configurator:
         arguments:
             $configProviders:
-                - '@microservice.first_rest.config_adapter'
-                - '@microservice.second_grpc.config_adapter'
-                - '@microservice.third_http.config_adapter'
+                - '@microservice.rest.config_provider'
+                - '@microservice.grpc.config_provider'
+                - '@microservice.http.config_provider'
+
+    #Symfony\Component\Form\FormBuilderInterface:
 

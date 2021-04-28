@@ -4,19 +4,32 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Service\ConfigProvider\ConfigManager;
+use App\Service\ConfigProvider\Configurator;
+use App\Service\Form\FormConstructor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MicroservicesConfiguratorController extends AbstractController
 {
+    /** @var Configurator */
+    private Configurator $configurator;
+    /** @var FormConstructor */
+    private FormConstructor $formConstructor;
+
+    public function __construct(Configurator $configurator, FormConstructor $formConstructor)
+    {
+        $this->configurator = $configurator;
+        $this->formConstructor = $formConstructor;
+    }
+
     /**
      * @Route("/configs", methods={"GET"})
      */
-    public function listConfigurations(ConfigManager $configManager)
+    public function listConfigurations()
     {
-        $configs = $configManager->getAllConfigs();
+        $configs = $this->configurator->getAllConfigs();
+        $forms = $this->formConstructor->createForms($configs);
 
-        return $this->render('', $configs);
+        return $this->render('', ['forms' => $forms]);
     }
 }
