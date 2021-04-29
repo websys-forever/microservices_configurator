@@ -15,7 +15,6 @@ x-php-settings: &php-settings
     - ./application:/var/www
   depends_on:
     - main-app-postgres
-    - main-app-rabbitmq
 
 services:
   main-app-nginx:
@@ -36,11 +35,6 @@ services:
       - "9000:9000"
     container_name: main-app-php-dev
 
-  #php-consume:
-  #  <<: *php-settings
-  #  container_name: main-app-php-consume
-  #  entrypoint: ["bash", "-c", "/var/www/scripts/php-consume-init.sh"]
-
   main-app-postgres:
     image: postgres:latest
     container_name: main-app-postgres
@@ -54,17 +48,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PORT: ${POSTGRES_PORT}
     shm_size: '1gb'
-
-  main-app-rabbitmq:
-    image: rabbitmq:management
-    container_name: main-app-rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-      - RABBITMQ_LOGS=/var/log/rabbitmq/logs
-    ports:
-      - "56721:5672"
-      - "15672:15672"
 
 volumes:
   .composer:

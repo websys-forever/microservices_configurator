@@ -6,15 +6,10 @@ namespace App\DTO\Config;
 
 class ConfigCollectionDto
 {
-    private array  $collection;
+    public array $collection;
 
     public function __construct(array $collection = [])
     {
         $this->collection = $collection;
-    }
-
-    public function getCollection(): array
-    {
-        return $this->collection;
     }
 }

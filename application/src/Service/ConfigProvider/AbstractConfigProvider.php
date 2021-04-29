@@ -27,7 +27,7 @@ abstract class AbstractConfigProvider implements ConfigProviderInterface
     }
 
     /** @inheritDoc */
-    public function getConfigs(): array
+    public function getConfigs(): ConfigCollectionDto
     {
         $configCollection = [];
 
@@ -42,11 +42,11 @@ abstract class AbstractConfigProvider implements ConfigProviderInterface
             }
         }
 
-        return [$this->microserviceUuid => new ConfigCollectionDto($configCollection)];
+        return new ConfigCollectionDto($configCollection);
     }
 
     public function saveConfigs(array $configs): bool
     {
-        return true; // TODO реализовать
+        return false; // TODO реализовать
     }
 }

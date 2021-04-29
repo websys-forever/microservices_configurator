@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Microservices configs</title>
+    <meta charset="UTF-8">
+    <title>Конфигурация микросервисов</title>
 </head>
 <body>
-<h1>Microservices configs</h1>
+<h1>Конфигурация микросервисов</h1>
 
-{% for form in forms %}
-    {{ form(form)}}
+{% for microserviceUuid, form in forms %}
+    <h4>Сервис: {{ microserviceUuid }}</h4>
+    <ul class="configs">
+        {{ form_start(form) }}
+        {% for configForm in form.collection %}
+            <li>{{ form_row(configForm.value) }}</li>
+        {% endfor %}
+        {{ form_end(form) }}
+    </ul>
 {% endfor %}
 
 </body>

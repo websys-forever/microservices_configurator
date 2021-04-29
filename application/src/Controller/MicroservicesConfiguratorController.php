@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Form\ConfigsFormType;
 use App\Service\ConfigProvider\Configurator;
-use App\Service\Form\FormConstructor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,17 +14,14 @@ class MicroservicesConfiguratorController extends AbstractController
 {
     /** @var Configurator */
     private Configurator $configurator;
-    /** @var FormConstructor */
-    private FormConstructor $formConstructor;
 
-    public function __construct(Configurator $configurator, FormConstructor $formConstructor)
+    public function __construct(Configurator $configurator)
     {
         $this->configurator = $configurator;
-        $this->formConstructor = $formConstructor;
     }
 
     /**
-     * @Route("/configs", methods={"GET"}, name="show_configs")
+     * @Route("/configs", methods={"GET"}, name="configs_list")
      */
     public function listConfigurations()
     {
@@ -35,25 +31,25 @@ class MicroservicesConfiguratorController extends AbstractController
         foreach ($allConfigs as $microserviceUuid => $microserviceConfigs) {
             $form = $this->createForm(
                 ConfigsFormType::class,
-                [$microserviceConfigs],
+                $microserviceConfigs,
                 [
-                    'action' => $this->generateUrl('save_configs', ['microservice_uuid' => $microserviceUuid]),
+                    'action' => $this->generateUrl('configs_save', ['microservice_uuid' => $microserviceUuid]),
                     'method' => 'POST',
                 ]
             );
-            $formViews[] = $form->createView();
+
+            $formViews[$microserviceUuid] = $form->createView();
         }
 
-        //dd($allConfigs);
         return $this->render('config/index.html.twig', ['forms' => $formViews]);
     }
 
     /**
-     * @Route("/configs/{microservice_uuid}/save", methods={"POST"}, name="save_configs")
+     * @Route("/configs/{microservice_uuid}/", methods={"POST"}, name="configs_save")
      */
     public function saveConfigurations()
     {
-        // TODO Доделать
-        return new Response('test save');
+        // TODO Доделать сохранение
+        return new Response('TODO Доделать сохранение');
     }
 }

@@ -6,12 +6,22 @@ namespace App\DTO\Config;
 
 abstract class AbstractConfig implements ConfigInterface
 {
-    private string $name;
-    private $value;
+    protected string $name;
+    protected $value;
 
     public function __construct(string $name, $value)
     {
         $this->name = $name;
+        $this->value = $value;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($value): void
+    {
         $this->value = $value;
     }
 
@@ -20,10 +30,8 @@ abstract class AbstractConfig implements ConfigInterface
         return $this->name;
     }
 
-    public function getValue()
+    public function setName(string $name): void
     {
-        return $this->value;
+        $this->name = $name;
     }
-
-    abstract public function getFormType(): string;
 }

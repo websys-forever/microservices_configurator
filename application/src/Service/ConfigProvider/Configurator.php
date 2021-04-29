@@ -19,15 +19,15 @@ class Configurator
 
         /** @var ConfigProviderInterface $provider */
         foreach ($this->configProviders as $provider) {
-            $configs[] = $provider->getConfigs();
+            $configs[$provider->getName()] = $provider->getConfigs();
         }
 
         return $configs;
     }
 
-    public function update($serviceName, array $configs): bool
+    public function update(string $serviceName, array $configs): bool
     {
-        return true; // TODO реализовать
+        return false; // TODO реализовать
     }
 
 
