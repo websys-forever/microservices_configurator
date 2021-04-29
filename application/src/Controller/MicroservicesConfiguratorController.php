@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Service\ConfigProvider\Configurator;
 use App\Service\Form\FormConstructor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MicroservicesConfiguratorController extends AbstractController
@@ -23,7 +24,7 @@ class MicroservicesConfiguratorController extends AbstractController
     }
 
     /**
-     * @Route("/configs", methods={"GET"})
+     * @Route("/configs", methods={"GET"}, name="show_configs")
      */
     public function listConfigurations()
     {
@@ -31,5 +32,14 @@ class MicroservicesConfiguratorController extends AbstractController
         $forms = $this->formConstructor->createForms($configs);
 
         return $this->render('config/index.html.twig', ['forms' => $forms]);
+    }
+
+    /**
+     * @Route("/configs/{microservice_uuid}/save", methods={"POST"}, name="save_configs")
+     */
+    public function saveConfigurations()
+    {
+        // TODO Доделать
+        return new Response('test save');
     }
 }

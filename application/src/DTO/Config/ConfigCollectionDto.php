@@ -7,12 +7,13 @@ namespace App\DTO\Config;
 class ConfigCollectionDto
 {
     private string $microserviceUuid;
-    private array  $configs;
+    /** @var ConfigInterface[] */
+    private array  $collection;
 
-    public function __construct(string $microserviceUuid, array $configs = [])
+    public function __construct(string $microserviceUuid, array $collection = [])
     {
         $this->microserviceUuid = $microserviceUuid;
-        $this->configs = $configs;
+        $this->collection = $collection;
     }
 
     public function getMicroserviceUuid(): string
@@ -20,8 +21,8 @@ class ConfigCollectionDto
         return $this->microserviceUuid;
     }
 
-    public function getFields(): array
+    public function getCollection(): array
     {
-        return $this->configs;
+        return $this->collection;
     }
 }

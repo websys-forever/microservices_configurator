@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Form;
 
 use App\DTO\Config\ConfigCollectionDto;
-use App\DTO\Config\ConfigInterface;
-use Symfony\Component\Form\FormBuilderInterface;
+use App\Form\ConfigsFormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -19,22 +18,23 @@ class FormConstructor
         $this->formFactory = $formFactory;
     }
 
-    /** @return FormInterface[] */
-    public function createForms(array $allConfigs)
+    /**
+     * @param ConfigCollectionDto[]
+     *
+     * @return FormInterface[]
+     */
+    public function createForms(array $allConfigs): array
     {
-        $forms = array_map(function ($configCollection) {
-            /** @var ConfigCollectionDto $configCollection */
-            $microserviceUuid = $configCollection->getMicroserviceUuid();
-            $configs = $configCollection->getFields();
+        $forms = array_map(function ($configCollectionDTO) {
+            /** @var ConfigCollectionDto $configCollectionDTO */
 
-            $form = $this->formFactory->createBuilder()->create($microserviceUuid, null, ['compound' => true]);
+            $form = $this->formFactory->create(
+                ConfigsFormType::class,
+                $configCollectionDTO,
+                ['compound' => true]
+            );
 
-            foreach ($configs as $config) {
-                /** @var ConfigInterface $config */
-                $form->add($config->getName(), $config->getFormType());
-            }
-
-            return $form->getForm()->createView();
+            return $form->createView();
         }, $allConfigs);
 
         return $forms;
