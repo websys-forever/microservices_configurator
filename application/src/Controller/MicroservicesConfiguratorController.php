@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\ConfigsFormType;
 use App\Service\ConfigProvider\Configurator;
 use App\Service\Form\FormConstructor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,10 +29,23 @@ class MicroservicesConfiguratorController extends AbstractController
      */
     public function listConfigurations()
     {
-        $configs = $this->configurator->getAllConfigs();
-        $forms = $this->formConstructor->createForms($configs);
+        $allConfigs = $this->configurator->getAllConfigs();
 
-        return $this->render('config/index.html.twig', ['forms' => $forms]);
+        $formViews = [];
+        foreach ($allConfigs as $microserviceUuid => $microserviceConfigs) {
+            $form = $this->createForm(
+                ConfigsFormType::class,
+                [$microserviceConfigs],
+                [
+                    'action' => $this->generateUrl('save_configs', ['microservice_uuid' => $microserviceUuid]),
+                    'method' => 'POST',
+                ]
+            );
+            $formViews[] = $form->createView();
+        }
+
+        //dd($allConfigs);
+        return $this->render('config/index.html.twig', ['forms' => $formViews]);
     }
 
     /**

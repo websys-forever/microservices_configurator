@@ -10,7 +10,8 @@ interface ConfigProviderInterface
 {
     public function getName(): string;
 
-    public function getConfigs(): ConfigCollectionDto;
+    /** @return ConfigCollectionDto[] */
+    public function getConfigs(): array;
 
     public function saveConfigs(array $configs): bool;
 }

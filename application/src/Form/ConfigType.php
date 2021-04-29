@@ -22,11 +22,5 @@ class ConfigType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data' => [],
-            'data_class' => ConfigInterface::class,
-        ]);
-
-        $resolver->setAllowedTypes('data', 'array');
     }
 }
